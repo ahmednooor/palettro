@@ -1,0 +1,138 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Palettro
+{% endblock %}
+
+{% block main %}
+    {% for palette in palettes %}
+    <div id="{{ palette.id }}" class="palette-container">
+        <div style="background-color: {{ palette.color_1 }};" class="color"><p class="hex-code">{{ palette.color_1 }}</p></div>
+        <div style="background-color: {{ palette.color_2 }};" class="color"><p class="hex-code">{{ palette.color_2 }}</p></div>
+        <div style="background-color: {{ palette.color_3 }};" class="color"><p class="hex-code">{{ palette.color_3 }}</p></div>
+        <div style="background-color: {{ palette.color_4 }};" class="color"><p class="hex-code">{{ palette.color_4 }}</p></div>
+        <button class="like-btn" data-id="{{ palette.id }}">
+            <i class="fa fa-heart" aria-hidden="true"></i>
+            <span>{{ palette.hearts }}</span>
+        </button>
+    </div>
+    {% endfor %}
+{% endblock %}
+
+{% block script %}
+<script>
+    $(document).ready(function () {
+    $('.latest').addClass('bold');
+    function allStorage() {
+        var values = [],
+            keys = Object.keys(localStorage),
+            i = keys.length;
+        while ( i-- ) {
+            values.push( localStorage.getItem(keys[i]) );
+        }
+        return values;
+    }
+    function checkLikedPalettes() {
+        var likeBtns = $('.like-btn');
+        likeBtns.each(function () {
+            var thisBtn = $(this);
+            var id = thisBtn.attr('data-id');
+            if (localStorage.getItem(id)) {
+                if (!thisBtn.hasClass('liked')) {
+                    thisBtn.addClass('liked');
+                }
+            }
+        });
+    }
+    checkLikedPalettes();
+
+    $( ".palettes-wrapper" ).on( "click", ".like-btn", function() {
+        var thisPalette = $(this);
+        var id = thisPalette.attr('data-id');
+        if (!localStorage.getItem(id)) {
+            $.get('/', {
+                id: id
+            })
+            .done(function(data) {
+                if (data.length == 0) {
+                    console.log("Couldn't register like on the clicked palette.")
+                } else {
+                    console.log('liked');
+                    localStorage.setItem(id, id);
+                    if (!thisPalette.hasClass('liked')) {
+                        thisPalette.addClass('liked');
+                    }
+                    thisPalette.children('span').html(data[0].hearts);
+                    $('.favs').html('( ' + allStorage().length + ' )');
+                }
+            })
+            .fail(function() {
+                console.log("ERROR: Couldn't set like.");
+            });
+        } else if (localStorage.getItem(id)) {
+            $.get('/', {
+                idd: id
+            })
+            .done(function(data) {
+                if (data.length == 0) {
+                    console.log("Couldn't register unlike on the clicked palette.")
+                } else {
+                    console.log('liked');
+                    localStorage.removeItem(id, id);
+                    if (thisPalette.hasClass('liked')) {
+                        thisPalette.removeClass('liked');
+                    }
+                    thisPalette.children('span').html(data[0].hearts);
+                    $('.favs').html('( ' + allStorage().length + ' )');
+                }
+            })
+            .fail(function() {
+                console.log("ERROR: Couldn't set unlike.");
+            });
+        }
+    });
+    var loaderAppended = false;
+    var allPalettesLoaded = false;
+    $(window).scroll(function() {
+        // if(($(window).scrollTop() == 0 || $(window).scrollTop() == ($(document).height() - $(window).height())) && allPalettesLoaded == false) {
+        if ($(window).scrollTop() + $(window).height() > $(document).height() - 60 && allPalettesLoaded == false) {
+            if (loaderAppended == false) {
+                var loader = $('<div class="loader"></div>');
+                $('.palettes-wrapper').append(loader);
+                loaderAppended = true;
+            }
+            setTimeout(function () {
+                $.get('/', {
+                    more: 20
+                })
+                .done(function(data) {
+                    $('.palettes-wrapper div.loader').remove();
+                    loaderAppended = false;
+                    if (data.length == 0) {
+                        console.log("No more palettes left.");
+                        allPalettesLoaded = true;
+                    } else {
+                        var dataLen = data.length;
+                        for (var i = 0; i < dataLen; i++) {
+                            var palette = $('<div></div>');
+                            
+                            palette.attr('id', data[i].id);
+                            palette.attr('class', "palette-container");
+                            
+                            palette.html('<div style="background-color:' + data[i].color_1 + ';" class="color"><p class="hex-code">' + data[i].color_1 + '</p></div>        <div style="background-color:' + data[i].color_2 + ';" class="color"><p class="hex-code">' + data[i].color_2 + '</p></div>        <div style="background-color:' + data[i].color_3 + ';" class="color"><p class="hex-code">' + data[i].color_3 + '</p></div>        <div style="background-color:' + data[i].color_4 + ';" class="color"><p class="hex-code">' + data[i].color_4 + '</p></div><button class="like-btn" data-id="' + data[i].id + '"><i class="fa fa-heart" aria-hidden="true"></i> <span>' + data[i].hearts + '</span></button>');
+
+                            $('.palettes-wrapper').append(palette);
+
+                            checkLikedPalettes();
+                        }
+                    }
+                })
+                .fail(function() {
+                    console.log("ERROR: Couldn't load palettes from server.");
+                });
+            }, 500);
+        }
+    });
+    });
+</script>
+{% endblock %}

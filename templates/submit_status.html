@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Submission - Palettro
+{% endblock %}
+
+{% block main %}
+    {% if success == True %}
+    <p class="submit-status-text" style="color: limegreen">{{ status }}</p>
+    {% endif %}
+    {% if success == False %}
+    <p class="submit-status-text" style="color: coral">{{ status }}</p>
+    {% endif %}
+{% endblock %}

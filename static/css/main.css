@@ -1,0 +1,315 @@
+*, *:before, *:after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Proxima Nova Rg', sans-serif;
+    width: 100%;
+    overflow-x: hidden;
+    /*background: #eeffff;*/
+    /*background: #eeefff;*/
+    background-color: lavender;
+    background: #daebee;
+    /*background-color: whitesmoke;*/
+}
+
+svg {
+    display: block;
+    max-height: 100%;
+    max-width: 100%;
+}
+
+header {
+    height: 50px;
+    background: #fff;
+    box-shadow: 0 6px 6px -4px rgba(0,0,0,0.1);
+    position: fixed;
+    right: 0;
+    left: 0;
+    z-index: 10;
+}
+header .logo-container {
+    text-align: center;
+}
+header .logo {
+    display: inline-block;
+    height: 50px;
+    width: 140px;
+    padding: 9px;
+    transition: color 0.2s ease-in-out;
+    color: #999;
+    color: coral;
+}
+header .logo:hover, header .logo:focus, header .logo:active {
+    color: aquamarine;
+    color: #999;
+}
+
+header .logo svg #logo-path {
+    fill: #aaa;
+    transition: fill 0.2s ease-in-out;
+}
+header .logo:hover > svg #logo-path {
+    fill: url(#SVGID_1_);
+}
+
+header .left-menu a, header .right-menu a {
+    display: inline-block;
+    vertical-align: middle;
+    color: #999;
+    margin-top: 13px;
+    font-size: 1.6rem;
+    vertical-align: middle;
+    margin-right: 20px;
+    text-decoration: none;
+    transition: color 0.2s ease-in-out;
+}
+header .left-menu a:hover, header .left-menu a:focus, header .left-menu a:active, header .right-menu a:hover, header .right-menu a:focus, header .right-menu a:active {
+    color: coral;
+    color: limegreen;
+    color: #333;
+}
+
+header .right-menu {
+    text-align: right;
+}
+header .right-menu a {
+    margin-left: 20px;
+}
+/*.favs {
+    background: #999;
+    color: #fff;
+    padding: 0 6px;
+    border-radius: 100000px;
+}*/
+
+
+.ham-menu-icon {
+    font-size: 2.2rem;
+    color: #aaa;
+    background: transparent;
+    border: none;
+    outline: 0;
+    position: fixed;
+    top: 10px;
+    right: 14px;
+    z-index: 20;
+}
+.mobile-menu-wrapper {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    right: 0;
+    left: 0;
+    background: #fff;
+    z-index: 12;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+}
+.mobile-menu-container {
+    min-width: 280px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+.mobile-menu {
+    list-style: none;
+    text-align: center;
+    overflow: auto;
+    max-height: 100vh;
+}
+.mobile-menu li {
+    /*margin-top: 20px;*/
+    border-bottom: 1px solid #ccc;
+}
+.mobile-menu li a {
+    display: inline-block;
+    color: #999;
+    font-size: 1.8rem;
+    text-decoration: none;
+    transition: color 0.2s ease-in-out;
+    padding: 20px 20px;
+}
+.mobile-menu li a:hover, .mobile-menu li a:focus, .mobile-menu li a:active {
+    color: limegreen;
+    color: #333;
+}
+
+
+
+.palettes-wrapper {
+    text-align: center;
+    margin-top: 50px;
+    font-size: 0;
+}
+
+.palette-container {
+    display: inline-block;
+    margin: 30px;
+    width: 160px;
+    padding: 12px;
+    background: #fff;
+    box-shadow: 0 4px 8px -4px rgba(0,0,0,0.3);
+    border-radius: 2px;
+}
+
+.palette-container .color {
+    height: 80px;
+    text-align: center;
+}
+
+.palette-container .color:hover > .hex-code {
+    opacity: 1;
+}
+
+.palette-container .color .hex-code {
+    background: #aaa;
+    background: rgba(0,0,0,0.2);
+    color: #fff;
+    display: inline-block;
+    padding: 1px 3px 1px 4px;
+    border-radius: 2px;
+    font-size: 1.5rem;
+    letter-spacing: 1px;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.palette-container .like-btn {
+    display: block;
+    text-align: center;
+    width: 100%;
+    background: transparent;
+    font-size: 2rem;
+    color: #bbb;
+    border: none;
+    margin-top: 12px;
+    box-shadow: none;
+    outline: 0;
+    transition: color 0.2s ease-in-out;
+}
+.palette-container .like-btn:hover, .palette-container .like-btn:active {
+    color: salmon;
+}
+.palette-container .like-btn.liked {
+    color: salmon;
+}
+
+
+
+.loader {
+    border-top: 6px solid coral;
+    border-radius: 100000px;
+    width: 40px;
+    height: 40px;
+    display: block;
+    margin: 20px auto 40px auto;
+    -webkit-transition: transform 0.5s linear;
+    -moz-transition: transform 0.5s linear;
+    transition: transform 0.5s linear;
+    animation: rotation 0.5s linear infinite;
+}
+@keyframes rotation {
+    0% {
+        transform: rotate(0deg)
+    }
+    100% {
+        transform: rotate(360deg)
+    }
+}
+
+
+
+
+
+.page-hdng {
+    font-size: 3rem;
+    color: #999;
+    text-align: center;
+    margin-top: 60px;
+    margin-bottom: 0;
+    font-weight: normal;
+}
+
+
+
+.color-input {
+    background: #fff;
+    display: block;
+    width: 100%;
+    height: 80px;
+    border: none;
+    border-radius: 0;
+    border-width: 0;
+    outline: none;
+    padding: 0;
+    margin: 0;
+    font-size: 0;
+    box-shadow: none;
+}
+
+.palette-submit {
+    background: #fff;
+    color: coral;
+    color: limegreen;
+    padding: 10px 20px;
+    font-size: 1.6rem;
+    border: none;
+    box-shadow: none;
+    outline: 0;
+    box-shadow: 0 3px 4px -2px rgba(0,0,0,0.2);
+}
+.palette-submit:active {
+    box-shadow: 0 2px 4px -2px rgba(0,0,0,0.2);
+    font-size: 1.5rem;
+}
+
+.hidden {
+    display: none;
+}
+.bold {
+    font-weight: bold;
+}
+
+.status-text {
+    text-align: center;
+    color: coral;
+    text-align: center;
+    font-size: 1.6rem;
+    margin-top: 20px;
+}
+
+.submit-status-text {
+    font-size: 2.5rem;
+    text-align: center;
+}
+
+
+
+
+.abt-logo-container {
+    max-width: 300px;
+    margin: 20px auto;
+    margin-top: 80px;
+    padding: 20px;
+    /*background: #fff;*/
+    /*border-radius: 20px;*/
+}
+.abt-logo-container svg #logo-path {
+    fill: #999;
+}
+.abt-text {
+    font-size: 1.6rem;
+    text-align: center;
+    display: block;
+    color: #666;
+}

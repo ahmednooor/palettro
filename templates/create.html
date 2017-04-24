@@ -1,0 +1,103 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Create - Palettro
+{% endblock %}
+
+{% block main %}
+    <h1 class="page-hdng">Create</h1>
+    <div id="144" class="palette-container">
+        <div style="background-color: rgb(230, 230, 230)" class="color c1" data-changed="false"></div>
+        <div style="background-color: rgb(220, 220, 220)" class="color c2" data-changed="false"></div>
+        <div style="background-color: rgb(210, 210, 210)" class="color c3" data-changed="false"></div>
+        <div style="background-color: rgb(200, 200, 200)" class="color c4" data-changed="false"></div>
+    </div>
+    
+    <form action="{{ url_for('create') }}" class="color-form" method="POST">
+        <div id="1" class="palette-container" style="display: none;">
+            <input type="text" name="color_1" value="" class="color-input">
+            <input type="text" name="color_2" value="" class="color-input">
+            <input type="text" name="color_3" value="" class="color-input">
+            <input type="text" name="color_4" value="" class="color-input">
+        </div>
+        <br>
+        <input type="submit" value="SUBMIT" class="palette-submit hidden">
+    </form>
+    <!--<br>-->
+    <p class="status-text"></p>
+{% endblock %}
+
+{% block script %}
+    <script src="../static/js/spectrum.js"></script>
+    <link rel="stylesheet" type="text/css" href="../static/css/spectrum.css">
+
+    <script>
+    $(document).ready(function () {
+        $('.create').addClass('bold');
+        function checkDataChange() {
+            var colorsboxes = $('.color');
+            var allChanged = false;
+            colorsboxes.each(function () {
+                if ($(this).attr('data-changed') == "false") {
+                    allChanged = false;
+                    return false;
+                } else {
+                    allChanged = true;
+                }
+            });
+            return allChanged;
+        }
+
+        $(".color").spectrum({
+            move: function(color) {
+                color = color.toHexString();
+                $(this).css('background-color', color);
+                $(this).attr('data-changed', "true");
+                if (checkDataChange() == true){
+                    $('.palette-submit').removeClass('hidden');
+                }
+            },
+            change: function(color) {
+                color = color.toHexString();
+                $(this).css('background-color', color);
+                $(this).attr('data-changed', "true");
+                if (checkDataChange() == true){
+                    $('.palette-submit').removeClass('hidden');
+                }
+            },
+            showButtons: false,
+            preferredFormat: "hex",
+            showInput: true,
+        });
+
+        function rgbtohex(color) { 
+            var a = color.split("(")[1].split(")")[0]; 
+            a = a.split(","); 
+            var b = a.map(function(x){ 
+                x = parseInt(x).toString(16); return (x.length==1) ? "0"+x : x;    
+            });
+            b = b.join(""); 
+            b = '#' + b;
+            return b;
+        }
+
+        var form = $('.color-form');
+        var inputs = $('.color-input');
+        var inputLength = inputs.length;
+        form.on('submit', function (e) {
+            // e.preventDefault();
+            var colors = [
+                rgbtohex($('.c1').css('background-color')),
+                rgbtohex($('.c2').css('background-color')),
+                rgbtohex($('.c3').css('background-color')),
+                rgbtohex($('.c4').css('background-color'))
+            ];
+            var i = 0;
+            inputs.each( function(i) {
+                $(this).val(colors[i]);
+                i++;
+            });
+        });
+    });
+    </script>
+{% endblock %}
