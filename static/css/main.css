@@ -10,7 +10,7 @@ body {
     overflow-x: hidden;
     /*background: #eeffff;*/
     /*background: #eeefff;*/
-    background-color: lavender;
+    /*background-color: lavender;*/
     background: #daebee;
     /*background-color: whitesmoke;*/
 }
@@ -48,7 +48,7 @@ header .logo:hover, header .logo:focus, header .logo:active {
 }
 
 header .logo svg #logo-path {
-    fill: #aaa;
+    fill: #bbb;
     transition: fill 0.2s ease-in-out;
 }
 header .logo:hover > svg #logo-path {
@@ -63,6 +63,7 @@ header .left-menu a, header .right-menu a {
     font-size: 1.6rem;
     vertical-align: middle;
     margin-right: 20px;
+    margin-left: 0;
     text-decoration: none;
     transition: color 0.2s ease-in-out;
 }
@@ -77,13 +78,9 @@ header .right-menu {
 }
 header .right-menu a {
     margin-left: 20px;
+    margin-right: 0;
 }
-/*.favs {
-    background: #999;
-    color: #fff;
-    padding: 0 6px;
-    border-radius: 100000px;
-}*/
+
 
 
 .ham-menu-icon {
@@ -197,8 +194,11 @@ header .right-menu a {
     outline: 0;
     transition: color 0.2s ease-in-out;
 }
-.palette-container .like-btn:hover, .palette-container .like-btn:active {
-    color: salmon;
+.palette-container .like-btn:hover{
+    color: #999;
+}
+.palette-container .like-btn:active {
+    color: #333;
 }
 .palette-container .like-btn.liked {
     color: salmon;
@@ -277,7 +277,7 @@ header .right-menu a {
     display: none;
 }
 .bold {
-    font-weight: bold;
+    color: #222 !important;
 }
 
 .status-text {
@@ -301,8 +301,6 @@ header .right-menu a {
     margin: 20px auto;
     margin-top: 80px;
     padding: 20px;
-    /*background: #fff;*/
-    /*border-radius: 20px;*/
 }
 .abt-logo-container svg #logo-path {
     fill: #999;
