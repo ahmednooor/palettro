@@ -46,56 +46,64 @@
     }
     checkLikedPalettes();
 
+    var likeClicked = false;
     $( ".palettes-wrapper" ).on( "click", ".like-btn", function() {
-        var thisPalette = $(this);
-        var id = thisPalette.attr('data-id');
-        if (!localStorage.getItem(id)) {
-            $.get('/popular', {
-                id: id
-            })
-            .done(function(data) {
-                if (data.length == 0) {
-                    console.log("Couldn't register like on the clicked palette.")
-                } else {
-                    console.log('liked');
-                    localStorage.setItem(id, id);
-                    if (!thisPalette.hasClass('liked')) {
-                        thisPalette.addClass('liked');
+        if (likeClicked == false) {
+            likeClicked = true;
+            var thisPalette = $(this);
+            var id = thisPalette.attr('data-id');
+            if (!localStorage.getItem(id)) {
+                $.get('/popular', {
+                    id: id
+                })
+                .done(function(data) {
+                    likeClicked = false;
+                    if (data.length == 0) {
+                        console.log("Couldn't register like on the clicked palette.")
+                    } else {
+                        console.log('liked');
+                        localStorage.setItem(id, id);
+                        if (!thisPalette.hasClass('liked')) {
+                            thisPalette.addClass('liked');
+                        }
+                        thisPalette.children('span').html(data[0].hearts);
+                        $('.favs').html('( ' + allStorage().length + ' )');
                     }
-                    thisPalette.children('span').html(data[0].hearts);
-                    $('.favs').html('( ' + allStorage().length + ' )');
-                }
-            })
-            .fail(function() {
-                console.log("ERROR: Couldn't set like.");
-            });
-        } else if (localStorage.getItem(id)) {
-            $.get('/popular', {
-                idd: id
-            })
-            .done(function(data) {
-                if (data.length == 0) {
-                    console.log("Couldn't register unlike on the clicked palette.")
-                } else {
-                    console.log('liked');
-                    localStorage.removeItem(id, id);
-                    if (thisPalette.hasClass('liked')) {
-                        thisPalette.removeClass('liked');
+                })
+                .fail(function() {
+                    likeClicked = false;
+                    console.log("ERROR: Couldn't set like.");
+                });
+            } else if (localStorage.getItem(id)) {
+                $.get('/popular', {
+                    idd: id
+                })
+                .done(function(data) {
+                    likeClicked = false;
+                    if (data.length == 0) {
+                        console.log("Couldn't register unlike on the clicked palette.")
+                    } else {
+                        console.log('liked');
+                        localStorage.removeItem(id, id);
+                        if (thisPalette.hasClass('liked')) {
+                            thisPalette.removeClass('liked');
+                        }
+                        thisPalette.children('span').html(data[0].hearts);
+                        $('.favs').html('( ' + allStorage().length + ' )');
                     }
-                    thisPalette.children('span').html(data[0].hearts);
-                    $('.favs').html('( ' + allStorage().length + ' )');
-                }
-            })
-            .fail(function() {
-                console.log("ERROR: Couldn't set unlike.");
-            });
+                })
+                .fail(function() {
+                    likeClicked = false;
+                    console.log("ERROR: Couldn't set unlike.");
+                });
+            }
         }
     });
+
     var loaderAppended = false;
     var allPalettesLoaded = false;
     $(window).scroll(function() {
-        // if(($(window).scrollTop() == 0 || $(window).scrollTop() == ($(document).height() - $(window).height())) && allPalettesLoaded == false) {
-        if ($(window).scrollTop() + $(window).height() > $(document).height() - 60 && allPalettesLoaded == false) {
+        if ($(window).scrollTop() + $(window).height() > $(document).height() - 50 && allPalettesLoaded == false && loaderAppended == false) {
             if (loaderAppended == false) {
                 var loader = $('<div class="loader"></div>');
                 $('.palettes-wrapper').append(loader);
@@ -128,9 +136,10 @@
                     }
                 })
                 .fail(function() {
+                    loaderAppended = false;
                     console.log("ERROR: Couldn't load palettes from server.");
                 });
-            }, 500);
+            }, 600);
         }
     });
     });
