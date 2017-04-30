@@ -249,7 +249,7 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
 */
 
 .sp-container {
-    position:absolute!important;
+    position:fixed!important;
     border-radius: 4px;
     background-color: white;
     border:1px solid #d7e5ed;
@@ -506,7 +506,7 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
 
 @media (max-device-width: 480px) {
     .sp-container {
-        position:absolute!important;
+        position:fixed!important;
         border-radius: 4px;
         background-color: white;
         border:1px solid #d7e5ed;

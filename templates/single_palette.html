@@ -1,51 +1,36 @@
 {% extends "layout.html" %}
 
-{% block title %} 
+{% block title %}
     Palettro
 {% endblock %}
 
 {% block main %}
-    {% for palette in palettes %}
+    {% if success == True %}
+    <p class="submit-status-text" style="color: limegreen">{{ status }}</p>
     <div id="{{ palette.id }}" class="palette-container">
         {% if palette.color_1 != 0 %}
-        <div style="background-color: {{ palette.color_1 }};" class="color">
-            <p class="hex-code">{{ palette.color_1 }}</p>
-        </div>
+        <div style="background-color: {{ palette.color_1 }};" class="color"><p class="hex-code">{{ palette.color_1 }}</p></div>
         {% endif %}
         {% if palette.color_2 != 0 %}
-        <div style="background-color: {{ palette.color_2 }};" class="color">
-            <p class="hex-code">{{ palette.color_2 }}</p>
-        </div>
+        <div style="background-color: {{ palette.color_2 }};" class="color"><p class="hex-code">{{ palette.color_2 }}</p></div>
         {% endif %}
         {% if palette.color_3 != 0 %}
-        <div style="background-color: {{ palette.color_3 }};" class="color">
-            <p class="hex-code">{{ palette.color_3 }}</p>
-        </div>
+        <div style="background-color: {{ palette.color_3 }};" class="color"><p class="hex-code">{{ palette.color_3 }}</p></div>
         {% endif %}
         {% if palette.color_4 != 0 %}
-        <div style="background-color: {{ palette.color_4 }};" class="color">
-            <p class="hex-code">{{ palette.color_4 }}</p>
-        </div>
+        <div style="background-color: {{ palette.color_4 }};" class="color"><p class="hex-code">{{ palette.color_4 }}</p></div>
         {% endif %}
         {% if palette.color_5 != 0 %}
-        <div style="background-color: {{ palette.color_5 }};" class="color">
-            <p class="hex-code">{{ palette.color_5 }}</p>
-        </div>
+        <div style="background-color: {{ palette.color_5 }};" class="color"><p class="hex-code">{{ palette.color_5 }}</p></div>
         {% endif %}
         {% if palette.color_6 != 0 %}
-        <div style="background-color: {{ palette.color_6 }};" class="color">
-            <p class="hex-code">{{ palette.color_5 }}</p>
-        </div>
+        <div style="background-color: {{ palette.color_6 }};" class="color"><p class="hex-code">{{ palette.color_5 }}</p></div>
         {% endif %}
         {% if palette.color_7 != 0 %}
-        <div style="background-color: {{ palette.color_7 }};" class="color">
-            <p class="hex-code">{{ palette.color_5 }}</p>
-        </div>
+        <div style="background-color: {{ palette.color_7 }};" class="color"><p class="hex-code">{{ palette.color_5 }}</p></div>
         {% endif %}
         {% if palette.color_8 != 0 %}
-        <div style="background-color: {{ palette.color_8 }};" class="color">
-            <p class="hex-code">{{ palette.color_8 }}</p>
-        </div>
+        <div style="background-color: {{ palette.color_8 }};" class="color"><p class="hex-code">{{ palette.color_8 }}</p></div>
         {% endif %}
         <button class="like-btn" data-id="{{ palette.id }}">
             <i class="fa fa-heart" aria-hidden="true"></i>
@@ -54,17 +39,18 @@
         <button class="dwnld-btn" data-id="{{ palette.id }}">
             <i class="fa fa-download" aria-hidden="true"></i>
         </button>
-        <button class="share-btn" data-id="{{ palette.id }}">
-            <a href="/palette/{{ palette.id }}" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a>
-        </button>
     </div>
-    {% endfor %}
+    {% endif %}
+    {% if success == False %}
+    <p class="submit-status-text" style="color: coral">{{ status }}</p>
+    {% endif %}
 {% endblock %}
+
 
 {% block script %}
 <script>
     $(document).ready(function () {
-    $('.latest').addClass('bold');
+    // $('.latest').addClass('bold');
 
     function allStorage() {
         var values = [],
@@ -149,71 +135,6 @@
             }
         }
     });
-
-    var loaderAppended = false;
-    var allPalettesLoaded = false;
-    $(window).scroll(function () {
-        if ($(window).scrollTop() + $(window).height() > $(document).height() - 160 &&
-            allPalettesLoaded == false && loaderAppended == false) {
-            if (loaderAppended == false) {
-                var loader = $('<div class="loader"></div>');
-                $('body').append(loader);
-                loaderAppended = true;
-            }
-            setTimeout(function () {
-                $.get('/', {
-                    more: 20
-                })
-                .done(function (data) {
-                    $('body div.loader').remove();
-                    loaderAppended = false;
-                    if (data.length == 0) {
-                        console.log("No more palettes left.");
-                        allPalettesLoaded = true;
-                    } else {
-                        var dataLen = data.length;
-                        for (var i = 0; i < dataLen; i++) {
-                            var palette = $('<div></div>');
-
-                            palette.attr('id', data[i].id);
-                            palette.attr('class', "palette-container");
-
-                            var colors = "";
-
-                            for (var j = 1; j < 9; j++) {
-                                var tmpColor = data[i]["color_" + (j)];
-                                if (tmpColor != 0) {
-                                    colors += '<div style="background-color:' +
-                                        tmpColor +
-                                        ';" class="color"><p class="hex-code">' +
-                                        tmpColor + '</p></div>';
-                                }
-                            }
-
-                            colors += '<button class="like-btn" data-id="' + data[i].id +'"><i class="fa fa-heart" aria-hidden="true"></i> <span>' + data[i].hearts + '</span></button>';
-
-                            colors += '<button class="dwnld-btn" data-id="' + data[i].id + '"><i class="fa fa-download" aria-hidden="true"></i></button>';
-
-                            colors += '<button class="share-btn" data-id="' + data[i].id + '"><a href="/palette/' + data[i].id + '" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a></button>';
-
-                            palette.html(colors);
-
-                            $('.palettes-wrapper').append(palette);
-
-                            masonryCont.masonry('appended', palette);
-                            masonryCont.masonry();
-
-                            checkLikedPalettes();
-                        }
-                    }
-                })
-                .fail(function () {
-                    loaderAppended = false;
-                    console.log("ERROR: Couldn't load palettes from server.");
-                });
-            }, 500);
-        }
-    });
     });
 </script>
 <script src="../static/js/jsPDF.js"></script>
@@ -227,7 +148,6 @@
             pdfContainer.html(paletteContainer.html());
             pdfContainer.children('.like-btn').remove();
             pdfContainer.children('.dwnld-btn').remove();
-            pdfContainer.children('.share-btn').remove();
             pdfContainer.find('p').css('opacity', '1');
             pdfContainer.css('margin-top', '800px');
             $('body').append(pdfContainer);

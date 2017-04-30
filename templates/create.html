@@ -6,19 +6,23 @@
 
 {% block main %}
     <h1 class="page-hdng">Create</h1>
-    <div id="144" class="palette-container">
-        <div style="background-color: rgb(230, 230, 230)" class="color c1" data-changed="false"></div>
-        <div style="background-color: rgb(220, 220, 220)" class="color c2" data-changed="false"></div>
-        <div style="background-color: rgb(210, 210, 210)" class="color c3" data-changed="false"></div>
-        <div style="background-color: rgb(200, 200, 200)" class="color c4" data-changed="false"></div>
+    <div id="create-palette" class="palette-container">
+        <div style="background-color: rgb(250, 250, 250)" class="color c1" data-changed="false"></div>
+        <div style="background-color: rgb(240, 240, 240)" class="color c2" data-changed="false"></div>
     </div>
+    <br>
+    <button id="addMoreColor" class="addMoreColor"><i class="fa fa-plus" aria-hidden="true"></i></button>
     
     <form action="{{ url_for('create') }}" class="color-form" method="POST">
-        <div id="1" class="palette-container" style="display: none;">
-            <input type="text" name="color_1" value="" class="color-input">
-            <input type="text" name="color_2" value="" class="color-input">
-            <input type="text" name="color_3" value="" class="color-input">
-            <input type="text" name="color_4" value="" class="color-input">
+        <div id="paletteInputs" class="palette-container" style="display: none;">
+            <input type="text" name="color_1" value="0" class="color-input">
+            <input type="text" name="color_2" value="0" class="color-input">
+            <input type="text" name="color_3" value="0" class="color-input">
+            <input type="text" name="color_4" value="0" class="color-input">
+            <input type="text" name="color_5" value="0" class="color-input">
+            <input type="text" name="color_6" value="0" class="color-input">
+            <input type="text" name="color_7" value="0" class="color-input">
+            <input type="text" name="color_8" value="0" class="color-input">
         </div>
         <br>
         <input type="submit" value="SUBMIT" class="palette-submit hidden">
@@ -48,28 +52,50 @@
             return allChanged;
         }
 
-        $(".color").spectrum({
-            move: function(color) {
-                color = color.toHexString();
-                $(this).css('background-color', color);
-                $(this).attr('data-changed', "true");
-                if (checkDataChange() == true){
-                    $('.palette-submit').removeClass('hidden');
+        var addMoreColorBtn = $('#addMoreColor');
+        var curColorsLen = 2;
+        var rgb = 240;
+        addMoreColorBtn.on('click', function () {
+            curColorsLen++;
+            rgb = rgb - 10;
+            if (curColorsLen <= 8) {
+                var clr = '<div style="background-color: rgb(' + rgb + ',' + rgb + ',' + rgb + ')" class="color c' + curColorsLen + '" data-changed="false"></div>';
+                // var inp = '<input type="text" name="color_' + curColorsLen + '" value="" class="color-input">';
+                $('#create-palette').append(clr);
+                // $('#paletteInputs').append(inp);
+                attachSpectrum(".color");
+                if (curColorsLen >= 8) {
+                    addMoreColorBtn.off('click');
+                    addMoreColorBtn.remove();
                 }
-            },
-            change: function(color) {
-                color = color.toHexString();
-                $(this).css('background-color', color);
-                $(this).attr('data-changed', "true");
-                if (checkDataChange() == true){
-                    $('.palette-submit').removeClass('hidden');
-                }
-            },
-            showButtons: false,
-            preferredFormat: "hex",
-            showInitial: true,
-            showInput: true
+            }
         });
+
+        function attachSpectrum(elem) {
+            $(elem).spectrum({
+                move: function(color) {
+                    color = color.toHexString();
+                    $(this).css('background-color', color);
+                    $(this).attr('data-changed', "true");
+                    if (checkDataChange() == true){
+                        $('.palette-submit').removeClass('hidden');
+                    }
+                },
+                change: function(color) {
+                    color = color.toHexString();
+                    $(this).css('background-color', color);
+                    $(this).attr('data-changed', "true");
+                    if (checkDataChange() == true){
+                        $('.palette-submit').removeClass('hidden');
+                    }
+                },
+                showButtons: false,
+                preferredFormat: "hex",
+                showInitial: true,
+                showInput: true
+            });
+        }
+        attachSpectrum(".color");
 
         function rgbtohex(color) { 
             var a = color.split("(")[1].split(")")[0]; 
@@ -83,21 +109,35 @@
         }
 
         var form = $('.color-form');
-        var inputs = $('.color-input');
-        var inputLength = inputs.length;
         form.on('submit', function (e) {
+            var inputs = $('.color-input');
+            var inputLength = inputs.length;
             // e.preventDefault();
-            var colors = [
-                rgbtohex($('.c1').css('background-color')),
-                rgbtohex($('.c2').css('background-color')),
-                rgbtohex($('.c3').css('background-color')),
-                rgbtohex($('.c4').css('background-color'))
-            ];
+            // var colors = [
+            //     rgbtohex($('.c1').css('background-color')),
+            //     rgbtohex($('.c2').css('background-color')),
+            //     rgbtohex($('.c3').css('background-color')),
+            //     rgbtohex($('.c4').css('background-color'))
+            // ];
+            var colorHEXs = [];
+            var colors = $('#create-palette .color');
+            
+            var j = 0;
+            colors.each(function (j) {
+                var rgbClr = $(this).css('background-color');
+                colorHEXs[j] = rgbtohex(rgbClr);
+                console.log(colorHEXs[j]);
+                j++;
+            });
+
             var i = 0;
             inputs.each( function(i) {
-                $(this).val(colors[i]);
+                $(this).attr('value', colorHEXs[i]);
+                var v = $(this).val();
+                console.log(v);
                 i++;
             });
+            // e.preventDefault();
         });
     });
     </script>

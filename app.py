@@ -123,19 +123,41 @@ def favourites():
 
 
 
+@app.route('/palette/<id>')
+def singlePalette(id):
+    palettes = db.execute("SELECT * FROM palettes WHERE id=:id", id=id)
+    if len(palettes) != 0:
+        return render_template("single_palette.html", success=True, palette=palettes[0])
+    else:
+        return render_template("single_palette.html", status="Palette not found.", success=False)
+
+
+
 @app.route('/create', methods=['GET', 'POST'])
 def create():
     if request.method == 'POST':
-        palettes = db.execute("SELECT * FROM palettes WHERE color_1=:color_1 AND color_2=:color_2 AND color_3=:color_3 AND color_4=:color_4", color_1=request.form["color_1"], color_2=request.form["color_2"], color_3=request.form["color_3"], color_4=request.form["color_4"])
+
+        color_1 = request.form["color_1"] if request.form["color_1"] else 0
+        color_2 = request.form["color_2"] if request.form["color_2"] else 0
+        color_3 = request.form["color_3"] if request.form["color_3"] else 0
+        color_4 = request.form["color_4"] if request.form["color_4"] else 0
+        color_5 = request.form["color_5"] if request.form["color_5"] else 0
+        color_6 = request.form["color_6"] if request.form["color_6"] else 0
+        color_7 = request.form["color_7"] if request.form["color_7"] else 0
+        color_8 = request.form["color_8"] if request.form["color_8"] else 0
+
+        palettes = db.execute("SELECT * FROM palettes WHERE color_1=:color_1 AND color_2=:color_2 AND color_3=:color_3 AND color_4=:color_4 AND color_5=:color_5 AND color_6=:color_6 AND color_7=:color_7 AND color_8=:color_8", color_1=color_1, color_2=color_2, color_3=color_3, color_4=color_4, color_5=color_5, color_6=color_6, color_7=color_7, color_8=color_8)
 
         if len(palettes) != 1:
-            db.execute("INSERT INTO palettes (color_1, color_2, color_3, color_4) VALUES (:color_1, :color_2, :color_3, :color_4)", color_1=request.form["color_1"], color_2=request.form["color_2"], color_3=request.form["color_3"], color_4=request.form["color_4"])
+            db.execute("INSERT INTO palettes (color_1, color_2, color_3, color_4, color_5, color_6, color_7, color_8) VALUES (:color_1, :color_2, :color_3, :color_4, :color_5, :color_6, :color_7, :color_8)", color_1=color_1, color_2=color_2, color_3=color_3, color_4=color_4, color_5=color_5, color_6=color_6, color_7=color_7, color_8=color_8)
 
-            return render_template("submit_status.html", status="Palette added successfully.", success=True)
+            palettes = db.execute("SELECT * FROM palettes WHERE color_1=:color_1 AND color_2=:color_2 AND color_3=:color_3 AND color_4=:color_4 AND color_5=:color_5 AND color_6=:color_6 AND color_7=:color_7 AND color_8=:color_8", color_1=color_1, color_2=color_2, color_3=color_3, color_4=color_4, color_5=color_5, color_6=color_6, color_7=color_7, color_8=color_8)
+
+            return render_template("submit_status.html", status="Palette added successfully.", success=True, palette=palettes[0])
         else:
             return render_template("submit_status.html", status="Palette already exists.", success=False)
 
-        return request.form["color_1"] + request.form["color_2"] + request.form["color_3"] + request.form["color_4"]
+        # return request.form["color_1"] + request.form["color_2"] + request.form["color_3"] + request.form["color_4"]
     else: 
         return render_template("create.html")
 

@@ -142,13 +142,19 @@ header .right-menu a {
 
 .palettes-wrapper {
     text-align: center;
-    margin-top: 50px;
+    margin: 50px auto;
+    /*margin-top: 50px;*/
     font-size: 0;
+}
+.palettes-wrapper:after {
+  content: '';
+  display: block;
+  clear: both;
 }
 
 .palette-container {
     display: inline-block;
-    margin: 30px;
+    margin: 20px;
     width: 160px;
     padding: 12px;
     background: #fff;
@@ -174,6 +180,7 @@ header .right-menu a {
     border-radius: 2px;
     font-size: 1.5rem;
     letter-spacing: 1px;
+    /*font-variant-ligatures: none;*/
     position: relative;
     top: 50%;
     transform: translateY(-50%);
@@ -181,7 +188,7 @@ header .right-menu a {
     transition: opacity 0.2s ease-in-out;
 }
 
-.palette-container .like-btn {
+.palette-container .like-btn, .palette-container .dwnld-btn, .palette-container .share-btn {
     display: block;
     text-align: center;
     width: 100%;
@@ -194,16 +201,30 @@ header .right-menu a {
     outline: 0;
     transition: color 0.2s ease-in-out;
 }
-.palette-container .like-btn:hover{
+.palette-container .like-btn:hover, .palette-container .dwnld-btn:hover, .palette-container .share-btn:hover {
     color: #999;
 }
-.palette-container .like-btn:active {
+.palette-container .like-btn:active, .palette-container .dwnld-btn:active, .palette-container .share-btn:active  {
     color: #333;
 }
 .palette-container .like-btn.liked {
     color: salmon;
 }
+.palette-container .share-btn a {
+    color: #bbb;
+    display: block;
+}
+.palette-container .share-btn a:hover {
+    color: #999;
+}
+.palette-container .share-btn a:active {
+    color: #333;
+}
 
+.palette-container .dwnld-btn, .palette-container .share-btn {
+    display: inline-block;
+    width: 50%;
+}
 
 
 .loader {
@@ -217,6 +238,7 @@ header .right-menu a {
     -moz-transition: transform 0.5s linear;
     transition: transform 0.5s linear;
     animation: rotation 0.5s linear infinite;
+    clear: both;
 }
 @keyframes rotation {
     0% {
@@ -257,11 +279,41 @@ header .right-menu a {
     box-shadow: none;
 }
 
+.addMoreColor {
+    font-size: 2.2rem;
+    /*width: 34px;
+    height: 34px;*/
+    /*padding: 2px;*/
+    margin-bottom: 10px;
+    padding: 4px 12px 3px 12px;
+    line-height: 1;
+    background: #fff;
+    color: #aaa;
+    border: none;
+    /*border: 1px solid #999;*/
+    border-radius: 100000px;
+    outline: 0;
+    transition: color 0.2s ease-in-out;
+    box-shadow: 0 3px 5px -2px rgba(0,0,0,0.2);
+}
+.addMoreColor:hover, .addMoreColor:focus {
+    color: #999;
+}
+.addMoreColor:active {
+    font-size: 2rem;
+    box-shadow: 0 2px 3px -1px rgba(0,0,0,0.2);
+    color: #666;
+    transition: none;
+}
+
+
 .palette-submit {
+    display: inline-block;
     background: #fff;
     color: coral;
     color: limegreen;
     padding: 10px 20px;
+    margin: 20px auto;
     font-size: 1.6rem;
     border: none;
     box-shadow: none;
@@ -310,4 +362,6 @@ header .right-menu a {
     text-align: center;
     display: block;
     color: #666;
+    margin: 0 auto;
+    max-width: 420px;
 }

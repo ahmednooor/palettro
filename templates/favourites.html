@@ -45,6 +45,12 @@
         });
     }
     checkLikedPalettes();
+
+    var masonryCont = $('.palettes-wrapper').masonry({
+        itemSelector: '.palette-container',
+        isFitWidth: true
+    });
+    masonryCont.masonry();
     
     var likeClicked = false;
     $( ".palettes-wrapper" ).on( "click", ".like-btn", function() {
@@ -117,11 +123,29 @@
                     
                     palette.attr('id', data[i].id);
                     palette.attr('class', "palette-container");
+
+                    var colors = "";
                     
-                    palette.html('<div style="background-color:' + data[i].color_1 + ';" class="color"><p class="hex-code">' + data[i].color_1 + '</p></div>        <div style="background-color:' + data[i].color_2 + ';" class="color"><p class="hex-code">' + data[i].color_2 + '</p></div>        <div style="background-color:' + data[i].color_3 + ';" class="color"><p class="hex-code">' + data[i].color_3 + '</p></div>        <div style="background-color:' + data[i].color_4 + ';" class="color"><p class="hex-code">' + data[i].color_4 + '</p></div><button class="like-btn" data-id="' + data[i].id + '"><i class="fa fa-heart" aria-hidden="true"></i> <span>' + data[i].hearts + '</span></button>');
+                    for (var j = 1; j < 9; j++) {
+                        var tmpColor = data[i]["color_" + (j)];
+                        if (tmpColor != 0) {
+                            colors += '<div style="background-color:' + tmpColor + ';" class="color"><p class="hex-code">' + tmpColor + '</p></div>';
+                        }
+                    }
+
+                    colors += '<button class="like-btn" data-id="' + data[i].id + '"><i class="fa fa-heart" aria-hidden="true"></i> <span>' + data[i].hearts + '</span></button>';
+
+                    colors += '<button class="dwnld-btn" data-id="' + data[i].id + '"><i class="fa fa-download" aria-hidden="true"></i></button>';
+
+                    colors += '<button class="share-btn" data-id="' + data[i].id + '"><a href="/palette/' + data[i].id + '" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a></button>';
+
+                    palette.html(colors);
 
                     $('.palettes-wrapper').append(palette);
-
+                    
+                    masonryCont.masonry('appended', palette);
+                    masonryCont.masonry();
+                    
                     checkLikedPalettes();
                 }
             }
@@ -131,5 +155,52 @@
         });
     }
     });
+</script>
+<script src="../static/js/jsPDF.js"></script>
+<script type="text/javascript" src="../static/js/html2canvas.js"></script>
+<script>
+    (function () {
+        $(".palettes-wrapper").on("click", ".dwnld-btn", function () {
+            var id = $(this).attr('data-id');
+            var paletteContainer = $('#' + id);
+            var pdfContainer = $('<div id="' + id + '" class="palette-container"></div>');
+            pdfContainer.html(paletteContainer.html());
+            pdfContainer.children('.like-btn').remove();
+            pdfContainer.children('.dwnld-btn').remove();
+            pdfContainer.children('.share-btn').remove();
+            pdfContainer.find('p').css('opacity', '1');
+            pdfContainer.css('margin-top', '800px');
+            $('body').append(pdfContainer);
+            var cache_width = pdfContainer.width();
+            var a4 = [595.28, 841.89];
+
+            createPDF();
+
+            //create pdf
+            function createPDF() {
+                getCanvas().then(function (canvas) {
+                    var
+                        img = canvas.toDataURL("image/png"),
+                        doc = new jsPDF({
+                            unit: 'px',
+                            format: 'a4'
+                        });
+                    doc.addImage(img, 'JPEG', 20, 20);
+                    doc.save(id + '.pdf');
+                    pdfContainer.width(cache_width);
+                    pdfContainer.remove();
+                });
+            }
+            
+            //get canvas
+            function getCanvas() {
+                pdfContainer.width((a4[0] * 1.33333) - 92).css('max-width', 'none');
+                return html2canvas(pdfContainer, {
+                    imageTimeout: 2000,
+                    removeContainer: true
+                });
+            }
+        });
+    }());
 </script>
 {% endblock %}

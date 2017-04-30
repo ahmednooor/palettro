@@ -7,13 +7,39 @@
 {% block main %}
     {% for palette in palettes %}
     <div id="{{ palette.id }}" class="palette-container">
+        {% if palette.color_1 != 0 %}
         <div style="background-color: {{ palette.color_1 }};" class="color"><p class="hex-code">{{ palette.color_1 }}</p></div>
+        {% endif %}
+        {% if palette.color_2 != 0 %}
         <div style="background-color: {{ palette.color_2 }};" class="color"><p class="hex-code">{{ palette.color_2 }}</p></div>
+        {% endif %}
+        {% if palette.color_3 != 0 %}
         <div style="background-color: {{ palette.color_3 }};" class="color"><p class="hex-code">{{ palette.color_3 }}</p></div>
+        {% endif %}
+        {% if palette.color_4 != 0 %}
         <div style="background-color: {{ palette.color_4 }};" class="color"><p class="hex-code">{{ palette.color_4 }}</p></div>
+        {% endif %}
+        {% if palette.color_5 != 0 %}
+        <div style="background-color: {{ palette.color_5 }};" class="color"><p class="hex-code">{{ palette.color_5 }}</p></div>
+        {% endif %}
+        {% if palette.color_6 != 0 %}
+        <div style="background-color: {{ palette.color_6 }};" class="color"><p class="hex-code">{{ palette.color_5 }}</p></div>
+        {% endif %}
+        {% if palette.color_7 != 0 %}
+        <div style="background-color: {{ palette.color_7 }};" class="color"><p class="hex-code">{{ palette.color_5 }}</p></div>
+        {% endif %}
+        {% if palette.color_8 != 0 %}
+        <div style="background-color: {{ palette.color_8 }};" class="color"><p class="hex-code">{{ palette.color_8 }}</p></div>
+        {% endif %}
         <button class="like-btn" data-id="{{ palette.id }}">
             <i class="fa fa-heart" aria-hidden="true"></i>
             <span>{{ palette.hearts }}</span>
+        </button>
+        <button class="dwnld-btn" data-id="{{ palette.id }}">
+            <i class="fa fa-download" aria-hidden="true"></i>
+        </button>
+        <button class="share-btn" data-id="{{ palette.id }}">
+            <a href="/palette/{{ palette.id }}" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a>
         </button>
     </div>
     {% endfor %}
@@ -45,6 +71,12 @@
         });
     }
     checkLikedPalettes();
+
+    var masonryCont = $('.palettes-wrapper').masonry({
+        itemSelector: '.palette-container',
+        isFitWidth: true
+    });
+    masonryCont.masonry();
 
     var likeClicked = false;
     $( ".palettes-wrapper" ).on( "click", ".like-btn", function() {
@@ -103,10 +135,10 @@
     var loaderAppended = false;
     var allPalettesLoaded = false;
     $(window).scroll(function() {
-        if ($(window).scrollTop() + $(window).height() > $(document).height() - 50 && allPalettesLoaded == false && loaderAppended == false) {
+        if ($(window).scrollTop() + $(window).height() > $(document).height() - 160 && allPalettesLoaded == false && loaderAppended == false) {
             if (loaderAppended == false) {
                 var loader = $('<div class="loader"></div>');
-                $('.palettes-wrapper').append(loader);
+                $('body').append(loader);
                 loaderAppended = true;
             }
             setTimeout(function () {
@@ -114,7 +146,7 @@
                     more: 20
                 })
                 .done(function(data) {
-                    $('.palettes-wrapper div.loader').remove();
+                    $('body div.loader').remove();
                     loaderAppended = false;
                     if (data.length == 0) {
                         console.log("No more palettes left.");
@@ -126,11 +158,29 @@
                             
                             palette.attr('id', data[i].id);
                             palette.attr('class', "palette-container");
+
+                            var colors = "";
                             
-                            palette.html('<div style="background-color:' + data[i].color_1 + ';" class="color"><p class="hex-code">' + data[i].color_1 + '</p></div>        <div style="background-color:' + data[i].color_2 + ';" class="color"><p class="hex-code">' + data[i].color_2 + '</p></div>        <div style="background-color:' + data[i].color_3 + ';" class="color"><p class="hex-code">' + data[i].color_3 + '</p></div>        <div style="background-color:' + data[i].color_4 + ';" class="color"><p class="hex-code">' + data[i].color_4 + '</p></div><button class="like-btn" data-id="' + data[i].id + '"><i class="fa fa-heart" aria-hidden="true"></i> <span>' + data[i].hearts + '</span></button>');
+                            for (var j = 1; j < 9; j++) {
+                                var tmpColor = data[i]["color_" + (j)];
+                                if (tmpColor != 0) {
+                                    colors += '<div style="background-color:' + tmpColor + ';" class="color"><p class="hex-code">' + tmpColor + '</p></div>';
+                                }
+                            }
+
+                            colors += '<button class="like-btn" data-id="' + data[i].id + '"><i class="fa fa-heart" aria-hidden="true"></i> <span>' + data[i].hearts + '</span></button>';
+
+                            colors += '<button class="dwnld-btn" data-id="' + data[i].id + '"><i class="fa fa-download" aria-hidden="true"></i></button>';
+
+                            colors += '<button class="share-btn" data-id="' + data[i].id + '"><a href="/palette/' + data[i].id + '" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a></button>';
+
+                            palette.html(colors);
 
                             $('.palettes-wrapper').append(palette);
-
+                            
+                            masonryCont.masonry('appended', palette);
+                            masonryCont.masonry();
+                            
                             checkLikedPalettes();
                         }
                     }
@@ -139,9 +189,56 @@
                     loaderAppended = false;
                     console.log("ERROR: Couldn't load palettes from server.");
                 });
-            }, 600);
+            }, 500);
         }
     });
     });
+</script>
+<script src="../static/js/jsPDF.js"></script>
+<script type="text/javascript" src="../static/js/html2canvas.js"></script>
+<script>
+    (function () {
+        $(".palettes-wrapper").on("click", ".dwnld-btn", function () {
+            var id = $(this).attr('data-id');
+            var paletteContainer = $('#' + id);
+            var pdfContainer = $('<div id="' + id + '" class="palette-container"></div>');
+            pdfContainer.html(paletteContainer.html());
+            pdfContainer.children('.like-btn').remove();
+            pdfContainer.children('.dwnld-btn').remove();
+            pdfContainer.children('.share-btn').remove();
+            pdfContainer.find('p').css('opacity', '1');
+            pdfContainer.css('margin-top', '800px');
+            $('body').append(pdfContainer);
+            var cache_width = pdfContainer.width();
+            var a4 = [595.28, 841.89];
+
+            createPDF();
+
+            //create pdf
+            function createPDF() {
+                getCanvas().then(function (canvas) {
+                    var
+                        img = canvas.toDataURL("image/png"),
+                        doc = new jsPDF({
+                            unit: 'px',
+                            format: 'a4'
+                        });
+                    doc.addImage(img, 'JPEG', 20, 20);
+                    doc.save(id + '.pdf');
+                    pdfContainer.width(cache_width);
+                    pdfContainer.remove();
+                });
+            }
+            
+            //get canvas
+            function getCanvas() {
+                pdfContainer.width((a4[0] * 1.33333) - 92).css('max-width', 'none');
+                return html2canvas(pdfContainer, {
+                    imageTimeout: 2000,
+                    removeContainer: true
+                });
+            }
+        });
+    }());
 </script>
 {% endblock %}
