@@ -137,7 +137,7 @@
 
                     colors += '<button class="dwnld-btn" data-id="' + data[i].id + '"><i class="fa fa-download" aria-hidden="true"></i></button>';
 
-                    colors += '<button class="share-btn" data-id="' + data[i].id + '"><a href="/palette/' + data[i].id + '" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a></button>';
+                    colors += '<a href="/palette/' + data[i].id + '" class="share-btn" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a>';
 
                     palette.html(colors);
 
