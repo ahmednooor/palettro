@@ -214,51 +214,48 @@
             }, 500);
         }
     });
+
+    $(".palettes-wrapper").on("click", ".dwnld-btn", function () {
+        var id = $(this).attr('data-id');
+        var paletteContainer = $('#' + id);
+        var pdfContainer = $('<div id="' + id + '" class="palette-container"></div>');
+        pdfContainer.html(paletteContainer.html());
+        pdfContainer.children('.like-btn').remove();
+        pdfContainer.children('.dwnld-btn').remove();
+        pdfContainer.children('.share-btn').remove();
+        pdfContainer.find('p').css('opacity', '1');
+        pdfContainer.css('margin-top', '800px');
+        $('body').append(pdfContainer);
+        var cache_width = pdfContainer.width();
+        var a4 = [595.28, 841.89];
+
+        createPDF();
+
+        //create pdf
+        function createPDF() {
+            getCanvas().then(function (canvas) {
+                var
+                    img = canvas.toDataURL("image/png"),
+                    doc = new jsPDF({
+                        unit: 'px',
+                        format: 'a4'
+                    });
+                doc.addImage(img, 'JPEG', 20, 20);
+                doc.save(id + '.pdf');
+                pdfContainer.width(cache_width);
+                pdfContainer.remove();
+            });
+        }
+        
+        //get canvas
+        function getCanvas() {
+            pdfContainer.width((a4[0] * 1.33333) - 92).css('max-width', 'none');
+            return html2canvas(pdfContainer, {
+                imageTimeout: 2000,
+                removeContainer: true
+            });
+        }
     });
-</script>
-<script>
-    (function () {
-        $(".palettes-wrapper").on("click", ".dwnld-btn", function () {
-            var id = $(this).attr('data-id');
-            var paletteContainer = $('#' + id);
-            var pdfContainer = $('<div id="' + id + '" class="palette-container"></div>');
-            pdfContainer.html(paletteContainer.html());
-            pdfContainer.children('.like-btn').remove();
-            pdfContainer.children('.dwnld-btn').remove();
-            pdfContainer.children('.share-btn').remove();
-            pdfContainer.find('p').css('opacity', '1');
-            pdfContainer.css('margin-top', '800px');
-            $('body').append(pdfContainer);
-            var cache_width = pdfContainer.width();
-            var a4 = [595.28, 841.89];
-
-            createPDF();
-
-            //create pdf
-            function createPDF() {
-                getCanvas().then(function (canvas) {
-                    var
-                        img = canvas.toDataURL("image/png"),
-                        doc = new jsPDF({
-                            unit: 'px',
-                            format: 'a4'
-                        });
-                    doc.addImage(img, 'JPEG', 20, 20);
-                    doc.save(id + '.pdf');
-                    pdfContainer.width(cache_width);
-                    pdfContainer.remove();
-                });
-            }
-            
-            //get canvas
-            function getCanvas() {
-                pdfContainer.width((a4[0] * 1.33333) - 92).css('max-width', 'none');
-                return html2canvas(pdfContainer, {
-                    imageTimeout: 2000,
-                    removeContainer: true
-                });
-            }
-        });
-    }());
+    });
 </script>
 {% endblock %}

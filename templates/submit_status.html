@@ -44,7 +44,7 @@
 
 {% block script %}
 <script>
-    (function () {
+    $(document).ready(function () {
         $(".palettes-wrapper").on("click", ".dwnld-btn", function () {
             var id = $(this).attr('data-id');
             var paletteContainer = $('#' + id);
@@ -86,6 +86,6 @@
                 });
             }
         });
-    }());
+    });
 </script>
 {% endblock %}

@@ -10,6 +10,9 @@
     <link rel="stylesheet" type="text/css" href="../static/fonts/proxima-nova/stylesheet.css">
     <link rel="stylesheet" type="text/css" href="../static/css/main.css">
     <link rel="icon" href="../static/img/favicon.png">
+    <script src="../static/js/jquery-3.2.1.min.js"></script>
+    <script src="../static/js/main.js"></script>
+    {% block script %}{% endblock %}
 </head>
 <body>
     <header class="container-fluid">
@@ -149,8 +152,7 @@
         </div>
     </section>
 
-    <script src="../static/js/jquery-3.2.1.min.js"></script>
-    <script src="../static/js/main.js"></script>
+    
     <!--<script src="../static/js/masonry.js"></script>
     <script src="../static/js/jsPDF.js"></script>
     <script src="../static/js/html2canvas.js"></script>-->
@@ -190,7 +192,7 @@
         });
     </script>
     
-    {% block script %}{% endblock %}
+    
 
 
 
