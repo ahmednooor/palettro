@@ -6,7 +6,7 @@
 
 {% block main %}
     {% for palette in palettes %}
-    <div id="{{ palette.id }}" class="palette-container">
+    <!--<div id="{{ palette.id }}" class="palette-container">
         {% if palette.color_1 != 0 %}
         <div style="background-color: {{ palette.color_1 }};" class="color"><p class="hex-code">{{ palette.color_1 }}</p></div>
         {% endif %}
@@ -39,7 +39,7 @@
             <i class="fa fa-download" aria-hidden="true"></i>
         </button>
         <a href="/palette/{{ palette.id }}" class="share-btn" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a>
-    </div>
+    </div>-->
     {% endfor %}
 {% endblock %}
 
@@ -47,15 +47,23 @@
 <script>
     $(document).ready(function () {
     $('.popular').addClass('bold');
+
+    var masonryCont = $('.palettes-wrapper').masonry({
+        itemSelector: '.palette-container',
+        isFitWidth: true
+    });
+    masonryCont.masonry();
+
     function allStorage() {
         var values = [],
             keys = Object.keys(localStorage),
             i = keys.length;
-        while ( i-- ) {
-            values.push( localStorage.getItem(keys[i]) );
+        while (i--) {
+            values.push(localStorage.getItem(keys[i]));
         }
         return values;
     }
+
     function checkLikedPalettes() {
         var likeBtns = $('.like-btn');
         likeBtns.each(function () {
@@ -70,167 +78,214 @@
     }
     checkLikedPalettes();
 
-    var masonryCont = $('.palettes-wrapper').masonry({
-        itemSelector: '.palette-container',
-        isFitWidth: true
-    });
-    masonryCont.masonry();
+    function loadPalettes() {
+        $.get('/popular', {
+            more: 20
+        })
+        .done(function (data) {
+            $('body div.loader').remove();
+            loaderAppended = false;
+            if (data.length == 0) {
+                console.log("No more palettes left.");
+                allPalettesLoaded = true;
+            } else {
+                var dataLen = data.length;
+                for (var i = 0; i < dataLen; i++) {
+                    var palette = $('<div></div>');
 
-    var likeClicked = false;
-    $( ".palettes-wrapper" ).on( "click", ".like-btn", function() {
-        if (likeClicked == false) {
-            likeClicked = true;
-            var thisPalette = $(this);
-            var id = thisPalette.attr('data-id');
-            if (!localStorage.getItem(id)) {
-                $.get('/popular', {
-                    id: id
-                })
-                .done(function(data) {
-                    likeClicked = false;
-                    if (data.length == 0) {
-                        console.log("Couldn't register like on the clicked palette.")
-                    } else {
-                        console.log('liked');
-                        localStorage.setItem(id, id);
-                        if (!thisPalette.hasClass('liked')) {
-                            thisPalette.addClass('liked');
+                    palette.attr('id', data[i].id);
+                    palette.attr('class', "palette-container");
+
+                    var colors = "";
+
+                    for (var j = 1; j < 9; j++) {
+                        var tmpColor = data[i]["color_" + (j)];
+                        if (tmpColor != 0) {
+                            colors += '<div style="background-color:' +
+                                tmpColor +
+                                ';" class="color"><a href="/palette/' + data[i].id + '"></a><p class="hex-code">' +
+                                tmpColor + '</p></div>';
                         }
-                        thisPalette.children('span').html(data[0].hearts);
-                        $('.favs').html('( ' + allStorage().length + ' )');
                     }
-                })
-                .fail(function() {
-                    likeClicked = false;
-                    console.log("ERROR: Couldn't set like.");
-                });
-            } else if (localStorage.getItem(id)) {
-                $.get('/popular', {
-                    idd: id
-                })
-                .done(function(data) {
-                    likeClicked = false;
-                    if (data.length == 0) {
-                        console.log("Couldn't register unlike on the clicked palette.")
-                    } else {
-                        console.log('liked');
-                        localStorage.removeItem(id, id);
-                        if (thisPalette.hasClass('liked')) {
-                            thisPalette.removeClass('liked');
-                        }
-                        thisPalette.children('span').html(data[0].hearts);
-                        $('.favs').html('( ' + allStorage().length + ' )');
-                    }
-                })
-                .fail(function() {
-                    likeClicked = false;
-                    console.log("ERROR: Couldn't set unlike.");
-                });
+
+                    colors += '<button class="like-btn" data-id="' + data[i].id +'"><i class="fa fa-heart" aria-hidden="true"></i> <span>' + data[i].hearts + '</span></button>';
+
+                    colors += '<button class="dwnld-btn" data-id="' + data[i].id + '"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>';
+
+                    // colors += '<a href="/palette/' + data[i].id + '" class="share-btn" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a>';
+
+                    palette.html(colors);
+
+                    $('.palettes-wrapper').append(palette);
+
+                    masonryCont.masonry('appended', palette);
+                    masonryCont.masonry();
+
+                    checkLikedPalettes();
+                }
             }
-        }
-    });
+        })
+        .fail(function () {
+            loaderAppended = false;
+            console.log("ERROR: Couldn't load palettes from server.");
+        });
+    }
 
     var loaderAppended = false;
     var allPalettesLoaded = false;
-    $(window).scroll(function() {
-        if ($(window).scrollTop() + $(window).height() > $(document).height() - 160 && allPalettesLoaded == false && loaderAppended == false) {
+    
+    if (allPalettesLoaded == false && loaderAppended == false) {
+        if (loaderAppended == false) {
+            var loader = $('<div class="loader"></div>');
+            $('body').append(loader);
+            loaderAppended = true;
+        }
+        setTimeout(function () {
+            loadPalettes();
+        }, 300);
+    }
+    $(window).scroll(function () {
+        if ($(window).scrollTop() + $(window).height() > $(document).height() - 160 &&
+            allPalettesLoaded == false && loaderAppended == false) {
             if (loaderAppended == false) {
                 var loader = $('<div class="loader"></div>');
                 $('body').append(loader);
                 loaderAppended = true;
             }
             setTimeout(function () {
-                $.get('/popular', {
-                    more: 20
-                })
-                .done(function(data) {
-                    $('body div.loader').remove();
-                    loaderAppended = false;
-                    if (data.length == 0) {
-                        console.log("No more palettes left.");
-                        allPalettesLoaded = true;
-                    } else {
-                        var dataLen = data.length;
-                        for (var i = 0; i < dataLen; i++) {
-                            var palette = $('<div></div>');
-                            
-                            palette.attr('id', data[i].id);
-                            palette.attr('class', "palette-container");
-
-                            var colors = "";
-                            
-                            for (var j = 1; j < 9; j++) {
-                                var tmpColor = data[i]["color_" + (j)];
-                                if (tmpColor != 0) {
-                                    colors += '<div style="background-color:' + tmpColor + ';" class="color"><p class="hex-code">' + tmpColor + '</p></div>';
-                                }
-                            }
-
-                            colors += '<button class="like-btn" data-id="' + data[i].id + '"><i class="fa fa-heart" aria-hidden="true"></i> <span>' + data[i].hearts + '</span></button>';
-
-                            colors += '<button class="dwnld-btn" data-id="' + data[i].id + '"><i class="fa fa-download" aria-hidden="true"></i></button>';
-
-                            colors += '<a href="/palette/' + data[i].id + '" class="share-btn" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a>';
-
-                            palette.html(colors);
-
-                            $('.palettes-wrapper').append(palette);
-                            
-                            masonryCont.masonry('appended', palette);
-                            masonryCont.masonry();
-                            
-                            checkLikedPalettes();
-                        }
-                    }
-                })
-                .fail(function() {
-                    loaderAppended = false;
-                    console.log("ERROR: Couldn't load palettes from server.");
-                });
-            }, 500);
+                loadPalettes();
+            }, 300);
         }
     });
+
+    var likeClicked = false;
+    $(".palettes-wrapper").on("click", ".like-btn", function () {
+        if (likeClicked == false) {
+            likeClicked = true;
+            var thisPalette = $(this);
+            var id = thisPalette.attr('data-id');
+            if (!localStorage.getItem(id)) {
+                $.get('/popular', {
+                        id: id
+                    })
+                    .done(function (data) {
+                        likeClicked = false;
+                        if (data.length == 0) {
+                            console.log("Couldn't register like on the clicked palette.")
+                        } else {
+                            console.log('liked');
+                            localStorage.setItem(id, id);
+                            if (!thisPalette.hasClass('liked')) {
+                                thisPalette.addClass('liked');
+                            }
+                            thisPalette.children('span').html(data[0].hearts);
+                            $('.favs').html('( ' + allStorage().length + ' )');
+                        }
+                    })
+                    .fail(function () {
+                        likeClicked = false;
+                        console.log("ERROR: Couldn't set like.");
+                    });
+            } else if (localStorage.getItem(id)) {
+                $.get('/popular', {
+                        idd: id
+                    })
+                    .done(function (data) {
+                        likeClicked = false;
+                        if (data.length == 0) {
+                            console.log("Couldn't register unlike on the clicked palette.")
+                        } else {
+                            console.log('liked');
+                            localStorage.removeItem(id, id);
+                            if (thisPalette.hasClass('liked')) {
+                                thisPalette.removeClass('liked');
+                            }
+                            thisPalette.children('span').html(data[0].hearts);
+                            $('.favs').html('( ' + allStorage().length + ' )');
+                        }
+                    })
+                    .fail(function () {
+                        likeClicked = false;
+                        console.log("ERROR: Couldn't set unlike.");
+                    });
+            }
+        }
+    });
+
+    function hexToRgb(hex){
+        var c;
+        if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)){
+            c= hex.substring(1).split('');
+            if(c.length== 3){
+                c= [c[0], c[0], c[1], c[1], c[2], c[2]];
+            }
+            c = '0x'+c.join('');
+            return [(c>>16)&255, (c>>8)&255, c&255];
+        }
+        throw new Error('Bad Hex');
+    }
+
+    function rgbtohex(color) { 
+        var a = color.split("(")[1].split(")")[0]; 
+        a = a.split(","); 
+        var b = a.map(function(x){ 
+            x = parseInt(x).toString(16); return (x.length==1) ? "0"+x : x;    
+        });
+        b = b.join(""); 
+        b = '#' + b;
+        return b;
+    }
 
     $(".palettes-wrapper").on("click", ".dwnld-btn", function () {
         var id = $(this).attr('data-id');
         var paletteContainer = $('#' + id);
-        var pdfContainer = $('<div id="' + id + '" class="palette-container"></div>');
-        pdfContainer.html(paletteContainer.html());
-        pdfContainer.children('.like-btn').remove();
-        pdfContainer.children('.dwnld-btn').remove();
-        pdfContainer.children('.share-btn').remove();
-        pdfContainer.find('p').css('opacity', '1');
-        pdfContainer.css('margin-top', '800px');
-        $('body').append(pdfContainer);
-        var cache_width = pdfContainer.width();
+        var paletteColors = paletteContainer.children('.color');
+        var rgbColors = [];
+        var hexColors = [];
+        var i = 0;
+        paletteColors.each(function (i) {
+            var elemColor = $(this).css('background-color');
+            
+            hexColors[i] = rgbtohex(elemColor).toUpperCase();
+
+            elemColor = elemColor.replace(/rgb\(/g, '')
+            elemColor = elemColor.replace(/\)/g, '')
+            elemColor = elemColor.replace(/ /g, '')
+            rgbColors[i] = elemColor.split(',');
+            rgbColors[i][0] = parseInt(rgbColors[i][0])
+            rgbColors[i][1] = parseInt(rgbColors[i][1])
+            rgbColors[i][2] = parseInt(rgbColors[i][2])
+
+            i++;
+        });
         var a4 = [595.28, 841.89];
 
         createPDF();
 
         //create pdf
         function createPDF() {
-            getCanvas().then(function (canvas) {
-                var
-                    img = canvas.toDataURL("image/png"),
-                    doc = new jsPDF({
-                        unit: 'px',
-                        format: 'a4'
-                    });
-                doc.addImage(img, 'JPEG', 20, 20);
-                doc.save(id + '.pdf');
-                pdfContainer.width(cache_width);
-                pdfContainer.remove();
-            });
+            var doc = new jsPDF({
+                    unit: 'px',
+                    format: 'a4'
+                });
+            
+            var j = 20;
+            for (var i = 0; i < rgbColors.length; i++) {
+                doc.setFillColor(rgbColors[i][0],rgbColors[i][1],rgbColors[i][2]);
+                doc.rect(22, j, 403, 50, 'F');
+                doc.setFillColor(255, 255, 255);
+                doc.rect(190, j + 17, 70, 16, 'F');
+
+                doc.setFont("courier");
+                doc.setFontSize(15);
+                doc.setTextColor(99, 99, 99);
+                doc.text(200, j + 28, hexColors[i]);
+
+                j += 50;
+            }
+            doc.save(id + '.pdf');
         }
         
-        //get canvas
-        function getCanvas() {
-            pdfContainer.width((a4[0] * 1.33333) - 92).css('max-width', 'none');
-            return html2canvas(pdfContainer, {
-                imageTimeout: 2000,
-                removeContainer: true
-            });
-        }
     });
     });
 </script>

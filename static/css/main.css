@@ -154,17 +154,37 @@ header .right-menu a {
 
 .palette-container {
     display: inline-block;
-    margin: 20px;
+    margin: 25px;
     width: 160px;
     padding: 12px;
     background: #fff;
     box-shadow: 0 4px 8px -4px rgba(0,0,0,0.3);
     border-radius: 2px;
+    font-size: 0;
 }
+.palette-container.single-palette {
+    /*transform: scale(1.1);*/
+    /*margin-top: 50px;*/
+}
+/*.palette-container.single-palette {
+    display: block;
+    margin:  50px auto;
+    margin-top: 75px;
+}*/
 
 .palette-container .color {
     height: 80px;
     text-align: center;
+    position: relative;
+}
+
+.palette-container .color a {
+    display: block;
+    position: absolute;
+    right: 0;
+    left: 0;
+    top: 0;
+    bottom: 0;
 }
 
 .palette-container .color:hover > .hex-code {
@@ -186,6 +206,7 @@ header .right-menu a {
     transform: translateY(-50%);
     opacity: 0;
     transition: opacity 0.2s ease-in-out;
+    text-transform: uppercase;
 }
 
 .palette-container .like-btn, .palette-container .dwnld-btn, .palette-container .share-btn {
@@ -193,16 +214,16 @@ header .right-menu a {
     text-align: center;
     width: 100%;
     background: transparent;
-    font-size: 2rem;
+    font-size: 1.8rem;
     color: #bbb;
     border: none;
     margin-top: 12px;
     box-shadow: none;
     outline: 0;
-    transition: color 0.2s ease-in-out;
+    /*transition: color 0.2s ease-in-out;*/
 }
 .palette-container .like-btn:hover, .palette-container .dwnld-btn:hover, .palette-container .share-btn:hover {
-    color: #999;
+    color: #888;
 }
 .palette-container .like-btn:active, .palette-container .dwnld-btn:active, .palette-container .share-btn:active  {
     color: #333;
@@ -210,6 +231,13 @@ header .right-menu a {
 .palette-container .like-btn.liked {
     color: salmon;
 }
+.palette-container .like-btn.liked:hover {
+    color: #ee5666;
+}
+.palette-container .like-btn.liked:active {
+    color: #bb5666;
+}
+
 .palette-container .share-btn a {
     color: #bbb;
     display: block;
@@ -221,9 +249,17 @@ header .right-menu a {
     color: #333;
 }
 
-.palette-container .dwnld-btn, .palette-container .share-btn {
+.palette-container .like-btn, .palette-container .dwnld-btn {
     display: inline-block;
-    width: 50%;
+    padding: 0 5px;
+}
+.palette-container .like-btn {
+    width: 70%;
+    text-align: left;
+}
+.palette-container .dwnld-btn {
+    width: 30%;
+    text-align: right;
 }
 
 
@@ -364,4 +400,17 @@ header .right-menu a {
     color: #666;
     margin: 0 auto;
     max-width: 420px;
+}
+
+
+.sm-share-links {
+    text-align: center;
+    margin: 0 auto;
+    margin-top: -40px;
+    /*height: 100px;*/
+}
+.sm-share-links div {
+    display: inline-block;
+    vertical-align: top !important;
+    margin: 0;
 }

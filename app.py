@@ -22,7 +22,7 @@ def add_header(r):
 
 
 inx = 0
-ind = 20
+ind = 0
 @app.route('/')
 def index():
     global inx
@@ -51,7 +51,7 @@ def index():
         return jsonify(palette)
     else:
         inx = 0
-        ind = 20
+        ind = 0
         palettes = db.execute("SELECT * FROM palettes")
         palettes.reverse()
         if ind > len(palettes):
@@ -90,7 +90,7 @@ def popular():
         return jsonify(palette)
     else:
         inx = 0
-        ind = 20
+        ind = 0
         palettes = db.execute("SELECT * FROM palettes")
         palettes = sorted(palettes, key=operator.itemgetter("hearts"), reverse=True)
         print(inx, ind)                
@@ -153,11 +153,10 @@ def create():
 
             palettes = db.execute("SELECT * FROM palettes WHERE color_1=:color_1 AND color_2=:color_2 AND color_3=:color_3 AND color_4=:color_4 AND color_5=:color_5 AND color_6=:color_6 AND color_7=:color_7 AND color_8=:color_8", color_1=color_1, color_2=color_2, color_3=color_3, color_4=color_4, color_5=color_5, color_6=color_6, color_7=color_7, color_8=color_8)
 
-            return render_template("submit_status.html", status="Palette added successfully.", success=True, palette=palettes[0])
+            return redirect('/palette/' + str(palettes[0]["id"]))
         else:
-            return render_template("submit_status.html", status="Palette already exists.", success=False)
+            return render_template("single_palette.html", status="Palette already exists.", success=False)
 
-        # return request.form["color_1"] + request.form["color_2"] + request.form["color_3"] + request.form["color_4"]
     else: 
         return render_template("create.html")
 
