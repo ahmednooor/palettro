@@ -1,5 +1,6 @@
 from flask import Flask, flash, redirect, render_template, request, session, url_for, jsonify
 from cs50 import SQL
+from flask_compress import Compress
 import operator
 import sys
 import optparse
@@ -8,6 +9,9 @@ import time
 
 # configure flask
 app = Flask(__name__)
+
+# compress app
+Compress(app)
 
 # configure CS50 Library to use SQLite database
 db = SQL("sqlite:///colors.db")
