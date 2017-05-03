@@ -2,7 +2,7 @@
 
 This app allows you to create color schemes which you can share with your friends and coworkers
 
-#Installation
+# Installation
 
 Just make sure you have `python` and `pip` installed already
 
@@ -11,7 +11,7 @@ Just make sure you have `python` and `pip` installed already
 
 You can view your app running after above steps at http://0.0.0.0:8900
 
-#Using Docker 
+# Using Docker 
 
 - Make sure you have docker installed already. With new version of docker, you can simply use terminal for next steps.
 - Run `docker build --rm -t fahdi/palettro .` You can change `-t` i.e tag param to whatever you like. Just make sure you use the same in next step
@@ -24,7 +24,7 @@ You can view your app running after above steps at http://0.0.0.0:8900
 - Make the build file executable with `chmod +x build.sh` or simply run `sh ./build.sh` to run the build script
 - If you made the build script executable in previous step, run './build' and you are good to go. You can access the app at http://localhost:5984 after that
 
-#Limitations 
+# Limitations 
 
 The build process doesn't take already running containers of the previous builds into consideration. Since the port is static, we get port conflicts if some container is already using it. This will be solved in next releases. 
 
