@@ -1,6 +1,10 @@
 from flask import Flask, flash, redirect, render_template, request, session, url_for, jsonify
 from cs50 import SQL
 import operator
+import sys
+import optparse
+import time
+
 
 # configure flask
 app = Flask(__name__)
@@ -166,5 +170,13 @@ def about():
     return render_template("about.html")
 
 
-if __name__ == "__main__":
-    app.run(debug=True)
+if __name__ == '__main__':
+    parser = optparse.OptionParser(usage="python app.py -p ")
+    parser.add_option('-p', '--port', action='store', dest='port', help='The port to listen on.')
+    (args, _) = parser.parse_args()
+    if args.port == None:
+        print "Missing required argument: -p/--port"
+        sys.exit(1)
+    app.run(host='0.0.0.0', port=int(args.port), debug=False)
+
+
