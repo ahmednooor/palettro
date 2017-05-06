@@ -1,2 +1,3 @@
 flask
 cs50
+flask_compress
