@@ -201,9 +201,11 @@ header .right-menu a {
     font-size: 1.5rem;
     letter-spacing: 1px;
     /*font-variant-ligatures: none;*/
-    position: relative;
-    top: 50%;
-    transform: translateY(-50%);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
     opacity: 0;
     transition: opacity 0.2s ease-in-out;
     text-transform: uppercase;
