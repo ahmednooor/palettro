@@ -8,11 +8,7 @@ body {
     font-family: 'Proxima Nova Rg', sans-serif;
     width: 100%;
     overflow-x: hidden;
-    /*background: #eeffff;*/
-    /*background: #eeefff;*/
-    /*background-color: lavender;*/
     background: #daebee;
-    /*background-color: whitesmoke;*/
 }
 
 svg {
@@ -30,9 +26,11 @@ header {
     left: 0;
     z-index: 10;
 }
+
 header .logo-container {
     text-align: center;
 }
+
 header .logo {
     display: inline-block;
     height: 50px;
@@ -42,6 +40,7 @@ header .logo {
     color: #999;
     color: coral;
 }
+
 header .logo:hover, header .logo:focus, header .logo:active {
     color: aquamarine;
     color: #999;
@@ -51,6 +50,7 @@ header .logo svg #logo-path {
     fill: #bbb;
     transition: fill 0.2s ease-in-out;
 }
+
 header .logo:hover > svg #logo-path {
     fill: url(#SVGID_1_);
 }
@@ -67,6 +67,7 @@ header .left-menu a, header .right-menu a {
     text-decoration: none;
     transition: color 0.2s ease-in-out;
 }
+
 header .left-menu a:hover, header .left-menu a:focus, header .left-menu a:active, header .right-menu a:hover, header .right-menu a:focus, header .right-menu a:active {
     color: coral;
     color: limegreen;
@@ -287,10 +288,6 @@ header .right-menu a {
     }
 }
 
-
-
-
-
 .page-hdng {
     font-size: 3rem;
     color: #999;
@@ -395,6 +392,7 @@ header .right-menu a {
 .abt-logo-container svg #logo-path {
     fill: #999;
 }
+
 .abt-text {
     font-size: 1.6rem;
     text-align: center;
@@ -404,12 +402,10 @@ header .right-menu a {
     max-width: 420px;
 }
 
-
 .sm-share-links {
     text-align: center;
     margin: 0 auto;
     margin-top: -40px;
-    /*height: 100px;*/
 }
 .sm-share-links div {
     display: inline-block;
