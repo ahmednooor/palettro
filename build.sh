@@ -1,4 +1,6 @@
-echo "Creatong the docker container"
+#!/bin/bash
+
+echo "Creating the docker container"
 
 docker build --rm -t fahdi/palettro .
 
