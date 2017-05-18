@@ -1,16 +1,16 @@
 #!/bin/bash
 
-echo "Creating the docker container"
+printf "Creating the docker container"
 
 docker build --rm -t fahdi/palettro .
 
-echo "Done building the docker image!"
+printf "Done building the docker image!"
 
-echo "Setting up the docker container"
+printf "Setting up the docker container"
 
 docker run -d -p 5984:8000 fahdi/palettro
 
-echo "Congrats, your docker app is running!"
+printf "Congrats, your docker app is running!"
 
 printf "\n\n##############################\n\n"
 
