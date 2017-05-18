@@ -1,41 +1,41 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Create - Palettro
+Create - Palettro
 {% endblock %}
 
 {% block main %}
-    <h1 class="page-hdng">Create</h1>
-    <div id="create-palette" class="palette-container">
-        <div style="background-color: rgb(250, 250, 250)" class="color c1" data-changed="false"></div>
-        <div style="background-color: rgb(240, 240, 240)" class="color c2" data-changed="false"></div>
+<h1 class="page-hdng">Create</h1>
+<div id="create-palette" class="palette-container">
+    <div style="background-color: rgb(250, 250, 250)" class="color c1" data-changed="false"></div>
+    <div style="background-color: rgb(240, 240, 240)" class="color c2" data-changed="false"></div>
+</div>
+<br>
+<button id="addMoreColor" class="addMoreColor"><i class="fa fa-plus" aria-hidden="true"></i></button>
+
+<form action="{{ url_for('create') }}" class="color-form" method="POST">
+    <div id="paletteInputs" class="palette-container" style="display: none;">
+        <input type="text" name="color_1" value="0" class="color-input">
+        <input type="text" name="color_2" value="0" class="color-input">
+        <input type="text" name="color_3" value="0" class="color-input">
+        <input type="text" name="color_4" value="0" class="color-input">
+        <input type="text" name="color_5" value="0" class="color-input">
+        <input type="text" name="color_6" value="0" class="color-input">
+        <input type="text" name="color_7" value="0" class="color-input">
+        <input type="text" name="color_8" value="0" class="color-input">
     </div>
     <br>
-    <button id="addMoreColor" class="addMoreColor"><i class="fa fa-plus" aria-hidden="true"></i></button>
-    
-    <form action="{{ url_for('create') }}" class="color-form" method="POST">
-        <div id="paletteInputs" class="palette-container" style="display: none;">
-            <input type="text" name="color_1" value="0" class="color-input">
-            <input type="text" name="color_2" value="0" class="color-input">
-            <input type="text" name="color_3" value="0" class="color-input">
-            <input type="text" name="color_4" value="0" class="color-input">
-            <input type="text" name="color_5" value="0" class="color-input">
-            <input type="text" name="color_6" value="0" class="color-input">
-            <input type="text" name="color_7" value="0" class="color-input">
-            <input type="text" name="color_8" value="0" class="color-input">
-        </div>
-        <br>
-        <input type="submit" value="SUBMIT" class="palette-submit hidden">
-    </form>
-    <!--<br>-->
-    <p class="status-text"></p>
+    <input type="submit" value="SUBMIT" class="palette-submit hidden">
+</form>
+<!--<br>-->
+<p class="status-text"></p>
 {% endblock %}
 
 {% block script %}
-    <script src="../static/js/spectrum.js"></script>
-    <link rel="stylesheet" type="text/css" href="../static/css/spectrum.css">
+<script src="../static/node_modules/spectrum-colorpicker/spectrum.js"></script>
+<link rel="stylesheet" type="text/css" href="../static/node_modules/spectrum-colorpicker/spectrum.css">
 
-    <script>
+<script>
     $(document).ready(function () {
         $('.create').addClass('bold');
         function checkDataChange() {
@@ -140,5 +140,6 @@
             // e.preventDefault();
         });
     });
-    </script>
+
+</script>
 {% endblock %}
