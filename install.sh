@@ -6,7 +6,13 @@ yarn install
 
 printf "\n\nMoving the node_modules into the `static` directory\n\n"
 
-mv node_modules static
+cd static
+
+rm -rf node_modules
+
+mv ../node_modules .
+
+cd ..
 
 printf "\n\nInstalling the project dependencies via pip\n\n"
 
