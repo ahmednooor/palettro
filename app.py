@@ -10,9 +10,6 @@ import time
 # configure flask
 app = Flask(__name__)
 
-# compress app
-Compress(app)
-
 # configure CS50 Library to use SQLite database
 db = SQL("sqlite:///colors.db")
 
@@ -181,6 +178,6 @@ if __name__ == '__main__':
     if args.port == None:
         print ("Missing required argument: -p/--port")
         sys.exit(1)
-    app.run(host='0.0.0.0', port=int(args.port), debug=False)
+    app.run(host='0.0.0.0', port=int(args.port), debug=True)
 
 

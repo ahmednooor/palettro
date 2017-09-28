@@ -135,27 +135,36 @@
                     console.log("ERROR: Couldn't set like.");
                 });
             } else if (localStorage.getItem(id)) {
-                $.get('/favourites', {
-                    idd: id
-                })
-                .done(function(data) {
-                    likeClicked = false;
-                    if (data.length == 0) {
-                        console.log("Couldn't register unlike on the clicked palette.")
-                    } else {
-                        console.log('liked');
-                        localStorage.removeItem(id, id);
-                        if (thisPalette.hasClass('liked')) {
-                            thisPalette.removeClass('liked');
-                        }
-                        thisPalette.children('span').html(data[0].hearts);
-                        $('.favs').html('( ' + allStorage().length + ' )');
-                    }
-                })
-                .fail(function() {
-                    likeClicked = false;
-                    console.log("ERROR: Couldn't set unlike.");
-                });
+                likeClicked = false;
+                console.log('unliked');
+                localStorage.removeItem(id, id);
+                if (thisPalette.hasClass('liked')) {
+                    thisPalette.removeClass('liked');
+                }
+                $('.favs').html('( ' + allStorage().length + ' )');
+
+                // $.get('/favourites', {
+                //     idd: id
+                // })
+                // .done(function(data) {
+                //     likeClicked = false;
+                //     if (data.length == 0) {
+                //         console.log("Couldn't register unlike on the clicked palette.")
+                //     } else {
+                //         console.log('liked');
+                //         localStorage.removeItem(id, id);
+                //         if (thisPalette.hasClass('liked')) {
+                //             thisPalette.removeClass('liked');
+                //         }
+                //         thisPalette.children('span').html(data[0].hearts);
+                //         $('.favs').html('( ' + allStorage().length + ' )');
+                //     }
+                // })
+                // .fail(function() {
+                //     likeClicked = false;
+                //     console.log("ERROR: Couldn't set unlike.");
+                // });
+
             }
         }
     });

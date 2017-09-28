@@ -6,6 +6,56 @@
 
 {% block main %}
     {% for palette in palettes %}
+    <!--<div id="{{ palette.id }}" class="palette-container">
+        {% if palette.color_1 != 0 %}
+        <div style="background-color: {{ palette.color_1 }};" class="color">
+            <p class="hex-code">{{ palette.color_1 }}</p>
+        </div>
+        {% endif %}
+        {% if palette.color_2 != 0 %}
+        <div style="background-color: {{ palette.color_2 }};" class="color">
+            <p class="hex-code">{{ palette.color_2 }}</p>
+        </div>
+        {% endif %}
+        {% if palette.color_3 != 0 %}
+        <div style="background-color: {{ palette.color_3 }};" class="color">
+            <p class="hex-code">{{ palette.color_3 }}</p>
+        </div>
+        {% endif %}
+        {% if palette.color_4 != 0 %}
+        <div style="background-color: {{ palette.color_4 }};" class="color">
+            <p class="hex-code">{{ palette.color_4 }}</p>
+        </div>
+        {% endif %}
+        {% if palette.color_5 != 0 %}
+        <div style="background-color: {{ palette.color_5 }};" class="color">
+            <p class="hex-code">{{ palette.color_5 }}</p>
+        </div>
+        {% endif %}
+        {% if palette.color_6 != 0 %}
+        <div style="background-color: {{ palette.color_6 }};" class="color">
+            <p class="hex-code">{{ palette.color_5 }}</p>
+        </div>
+        {% endif %}
+        {% if palette.color_7 != 0 %}
+        <div style="background-color: {{ palette.color_7 }};" class="color">
+            <p class="hex-code">{{ palette.color_5 }}</p>
+        </div>
+        {% endif %}
+        {% if palette.color_8 != 0 %}
+        <div style="background-color: {{ palette.color_8 }};" class="color">
+            <p class="hex-code">{{ palette.color_8 }}</p>
+        </div>
+        {% endif %}
+        <button class="like-btn" data-id="{{ palette.id }}">
+            <i class="fa fa-heart" aria-hidden="true"></i>
+            <span>{{ palette.hearts }}</span>
+        </button>
+        <button class="dwnld-btn" data-id="{{ palette.id }}">
+            <i class="fa fa-download" aria-hidden="true"></i>
+        </button>
+        <a href="/palette/{{ palette.id }}" class="share-btn" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a>
+    </div>-->
     {% endfor %}
 {% endblock %}
 
@@ -132,48 +182,57 @@
             var id = thisPalette.attr('data-id');
             if (!localStorage.getItem(id)) {
                 $.get('/', {
-                        id: id
-                    })
-                    .done(function (data) {
-                        likeClicked = false;
-                        if (data.length == 0) {
-                            console.log("Couldn't register like on the clicked palette.")
-                        } else {
-                            console.log('liked');
-                            localStorage.setItem(id, id);
-                            if (!thisPalette.hasClass('liked')) {
-                                thisPalette.addClass('liked');
-                            }
-                            thisPalette.children('span').html(data[0].hearts);
-                            $('.favs').html('( ' + allStorage().length + ' )');
+                    id: id
+                })
+                .done(function (data) {
+                    likeClicked = false;
+                    if (data.length == 0) {
+                        console.log("Couldn't register like on the clicked palette.")
+                    } else {
+                        console.log('liked');
+                        localStorage.setItem(id, id);
+                        if (!thisPalette.hasClass('liked')) {
+                            thisPalette.addClass('liked');
                         }
-                    })
-                    .fail(function () {
-                        likeClicked = false;
-                        console.log("ERROR: Couldn't set like.");
-                    });
+                        thisPalette.children('span').html(data[0].hearts);
+                        $('.favs').html('( ' + allStorage().length + ' )');
+                    }
+                })
+                .fail(function () {
+                    likeClicked = false;
+                    console.log("ERROR: Couldn't set like.");
+                });
             } else if (localStorage.getItem(id)) {
-                $.get('/', {
-                        idd: id
-                    })
-                    .done(function (data) {
-                        likeClicked = false;
-                        if (data.length == 0) {
-                            console.log("Couldn't register unlike on the clicked palette.")
-                        } else {
-                            console.log('liked');
-                            localStorage.removeItem(id, id);
-                            if (thisPalette.hasClass('liked')) {
-                                thisPalette.removeClass('liked');
-                            }
-                            thisPalette.children('span').html(data[0].hearts);
-                            $('.favs').html('( ' + allStorage().length + ' )');
-                        }
-                    })
-                    .fail(function () {
-                        likeClicked = false;
-                        console.log("ERROR: Couldn't set unlike.");
-                    });
+                likeClicked = false;
+                console.log('unliked');
+                localStorage.removeItem(id, id);
+                if (thisPalette.hasClass('liked')) {
+                    thisPalette.removeClass('liked');
+                }
+                $('.favs').html('( ' + allStorage().length + ' )');
+                
+                // $.get('/', {
+                //     idd: id
+                // })
+                // .done(function (data) {
+                //     likeClicked = false;
+                //     if (data.length == 0) {
+                //         console.log("Couldn't register unlike on the clicked palette.")
+                //     } else {
+                //         console.log('liked');
+                //         localStorage.removeItem(id, id);
+                //         if (thisPalette.hasClass('liked')) {
+                //             thisPalette.removeClass('liked');
+                //         }
+                //         thisPalette.children('span').html(data[0].hearts);
+                //         $('.favs').html('( ' + allStorage().length + ' )');
+                //     }
+                // })
+                // .fail(function () {
+                //     likeClicked = false;
+                //     console.log("ERROR: Couldn't set unlike.");
+                // });
+                
             }
         }
     });

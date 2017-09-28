@@ -6,16 +6,14 @@ This app allows you to create color schemes which you can share with your friend
 
 ## Automated 
 
-Just make sure you have `yarn`, `python` and `pip` installed already
+Just make sure you have `python` and `pip` installed already
 
 - Make the install file executable with `chmod +x install.sh` and run it via `./install.sh` or simply run `sh ./install.sh` 
 
-	Above will install the node modules. In addition, it will move them into static folder, install all the requirements and then start the python server.
+	Above will install all the requirements and then start the python server.
 
 # Manually
 
-- Run `yarn install` 
-- Run `mv node_modules static` which will move the newly installed node_module to the `static` directory
 - Run `pip install -r requirements.txt`
 - Run `python app.py -p 8900` where `-p` param is for the port you want to run it on
 

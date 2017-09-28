@@ -1,35 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="../static/fonts/proxima-nova/stylesheet.css">
     <link rel="stylesheet" type="text/css" href="../static/css/main.css">
-    <link rel="icon" href="../static/img/favicon.png">    
-    <script src="../static/node_modules/jquery/dist/jquery.min.js"></script>
-    <script src="../static/node_modules/masonry-layout/dist/masonry.pkgd.min.js"></script>
+    <link rel="icon" href="../static/img/favicon.png">
+    <script src="../static/js/jquery-3.2.1.min.js"></script>
+    <script src="../static/js/main.js"></script>
     {% block script %}{% endblock %}
 </head>
-
 <body>
     <header class="container-fluid">
-        <div class="row">
-            <div class="col-sm-5 left-menu hidden-xs">
-                <a class="latest" href="{{ url_for('index') }}" class="home">Latest</a>
-                <a class="popular" href="{{ url_for('popular') }}" class="home">Popular</a>
-                <a class="favourites" href="{{ url_for('favourites') }}" class="home">Favourites <span class="favs"></span></a>
-            </div>
-            <div class="col-sm-2 logo-container">
-                <a href="{{ url_for('index') }}" class="logo">
-                    <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 769 251.7" enable-background="new 0 0 769 251.7" xml:space="preserve">
+        <!--<div class="container">-->
+            <div class="row">
+                <div class="col-sm-5 left-menu hidden-xs">
+                    <a class="latest" href="{{ url_for('index') }}" class="home">Latest</a>
+                    <a class="popular" href="{{ url_for('popular') }}" class="home">Popular</a>
+                    <a class="favourites" href="{{ url_for('favourites') }}" class="home">Favourites <span class="favs"></span></a>
+                </div>
+                <div class="col-sm-2 logo-container">
+                    <a href="{{ url_for('index') }}" class="logo">
+                        <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 769 251.7" enable-background="new 0 0 769 251.7" xml:space="preserve">
                         <linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="10.3015" y1="125.8317" x2="758.6985" y2="125.8317">
-                            <stop offset="0" style="stop-color:coral" />
-                            <stop offset="0.33" style="stop-color:gold" />
-                            <stop offset="0.66" style="stop-color:limegreen" />
-                            <stop offset="1" style="stop-color:cyan" />
+                            <stop  offset="0" style="stop-color:coral"/>
+                            <stop  offset="0.33" style="stop-color:gold"/>
+                            <stop  offset="0.66" style="stop-color:limegreen"/>
+                            <stop  offset="1" style="stop-color:cyan"/>
                         </linearGradient>
                         <path id="logo-path" fill="url(#SVGID_1_)" d="M208.2,124.2c-8.3,7.5-17.3,14.3-27.2,20.4c-9.9,6.2-20.4,11.4-31.6,15.7
                             c-11.2,4.3-22.7,7.3-34.4,8.9c-2.8,6.6-5,13.1-6.6,19.5c-1.6,6.4-2.4,12.4-2.4,18.1c0,3.4,0.4,6.5,1.2,9.4c0.8,2.9,1.7,5.5,2.6,7.8
@@ -114,17 +115,20 @@
                             c-3.9-2.4-7.3-5.2-10.1-8.4c-1.5,3.6-2.8,7.2-3.8,10.6c-1,3.4-1.5,6.4-1.5,9c0,2,0.5,3.6,1.4,4.7c0.9,1.1,2.6,1.7,4.9,1.7
                             c4.1,0,8-1.1,11.5-3.3C681.5,191.8,684.8,188.9,688,185.1z M710.9,127.2c0-4.7-0.6-7-1.8-7c-1.2,0-3,1.5-5.5,4.5
                             c-2.5,3-5,6.7-7.5,11.2c-2.5,4.5-4.7,9.2-6.6,14.3c-1.9,5-2.8,9.7-2.8,13.9c0,2.7,0.6,5,1.9,6.9c1.3,1.9,3.6,3.1,7,3.5
-                            c2.3-4,4.5-8.2,6.3-12.5c1.9-4.3,3.5-8.6,4.8-12.8c1.3-4.2,2.3-8.2,3-12C710.5,133.3,710.9,130,710.9,127.2z" />
-                    </svg>
-                </a>
+                            c2.3-4,4.5-8.2,6.3-12.5c1.9-4.3,3.5-8.6,4.8-12.8c1.3-4.2,2.3-8.2,3-12C710.5,133.3,710.9,130,710.9,127.2z"/>
+                        </svg>
+
+                    </a>
+                </div>
+                <div class="col-sm-5 right-menu hidden-xs">
+                    <a class="create" href="{{ url_for('create') }}" class="create">Create</a>
+                    <a class="about" href="{{ url_for('about') }}" class="home">About</a>
+                </div>
             </div>
-            <div class="col-sm-5 right-menu hidden-xs">
-                <a class="create" href="{{ url_for('create') }}" class="create">Create</a>
-                <a class="about" href="{{ url_for('about') }}" class="home">About</a>
-            </div>
-        </div>
+        <!--</div>-->
     </header>
     <br>
+
     <button class="ham-menu-icon hidden-sm hidden-md hidden-lg"><i class="fa fa-bars" aria-hidden="true"></i></button>
     <section class="mobile-menu-wrapper">
         <nav class="mobile-menu-container">
@@ -137,6 +141,7 @@
             </ul>
         </nav>
     </section>
+
     <section class="container-fluid">
         <div class="row">
             <div class="col-xs-12">
@@ -147,42 +152,50 @@
             </div>
         </div>
     </section>
+
+    
+    <!--<script src="../static/js/masonry.js"></script>
+    <script src="../static/js/jsPDF.js"></script>
+    <script src="../static/js/html2canvas.js"></script>-->
     <script>
-    $(document).ready(function() {
-        var navIcon = $('.ham-menu-icon');
-        var mobileMenu = $('.mobile-menu-wrapper');
-        var menuVisible = false;
-        navIcon.on('click', function() {
-            if (menuVisible == false) {
-                menuVisible = true;
-                mobileMenu.css('display', 'block');
-                setTimeout(function() {
-                    mobileMenu.css('opacity', '1');
-                }, 50);
-                navIcon.html('<i class="fa fa-times" aria-hidden="true"></i>');
-            } else if (menuVisible == true) {
-                menuVisible = false;
-                mobileMenu.css('opacity', '0');
-                setTimeout(function() {
-                    mobileMenu.css('display', 'none');
-                }, 210);
-                navIcon.html('<i class="fa fa-bars" aria-hidden="true"></i>');
+        $(document).ready(function () {
+            var navIcon = $('.ham-menu-icon');
+            var mobileMenu = $('.mobile-menu-wrapper');
+            var menuVisible = false;
+            navIcon.on('click', function () {
+                if (menuVisible == false) {
+                    menuVisible = true;
+                    mobileMenu.css('display', 'block');
+                    setTimeout(function () {
+                        mobileMenu.css('opacity', '1');
+                    }, 50);
+                    navIcon.html('<i class="fa fa-times" aria-hidden="true"></i>');
+                } else if (menuVisible == true) {
+                    menuVisible = false;
+                    mobileMenu.css('opacity', '0');
+                    setTimeout(function () {
+                        mobileMenu.css('display', 'none');
+                    }, 210);
+                    navIcon.html('<i class="fa fa-bars" aria-hidden="true"></i>');
+                }
+            });
+            function allStorage() {
+                var values = [],
+                    keys = Object.keys(localStorage),
+                    i = keys.length;
+                while ( i-- ) {
+                    values.push( localStorage.getItem(keys[i]) );
+                }
+                return values;
             }
+            var favourites = allStorage();
+            $('.favs').html('( ' + favourites.length + ' )');
         });
-
-        function allStorage() {
-            var values = [],
-                keys = Object.keys(localStorage),
-                i = keys.length;
-            while (i--) {
-                values.push(localStorage.getItem(keys[i]));
-            }
-            return values;
-        }
-        var favourites = allStorage();
-        $('.favs').html('( ' + favourites.length + ' )');
-    });
     </script>
-</body>
+    
+    
 
+
+
+</body>
 </html>
